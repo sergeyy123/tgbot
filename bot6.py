@@ -16,8 +16,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 # --- НАСТРОЙКИ ---
-API_TOKEN = '8332412698:AAGn8cHlDtTdqxKqG6YFv07S7mfIr0JSiAg'
-SUBSCRIBED_CHAT_ID = -4826017294
+API_TOKEN = 'API BOT TOKEN'
+SUBSCRIBED_CHAT_ID = -chat-id
 
 # Ленты
 NEWS_RSS_URL = "https://lenta.ru/rss/top7"
