@@ -16,8 +16,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 # --- НАСТРОЙКИ ---
-API_TOKEN = 'API BOT TOKEN'
-SUBSCRIBED_CHAT_ID = -chat-id
+API_TOKEN = '8332412698:AAGn8cHlDtTdqxKqG6YFv07S7mfIr0JSiAg'
+SUBSCRIBED_CHAT_ID = -4826017294
 
 # Ленты
 NEWS_RSS_URL = "https://lenta.ru/rss/top7"
@@ -132,10 +132,31 @@ def get_weather():
     except: return "🌡 Погода: Нет данных"
 
 def get_currency():
+    # --- 1. Фиатные деньги (ЦБ РФ) ---
     try:
         data = requests.get("https://www.cbr-xml-daily.ru/daily_json.js").json()
-        return f"💰 <b>USD:</b> {data['Valute']['USD']['Value']:.2f} ₽"
-    except: return "💰 Нет данных"
+        usd = data['Valute']['USD']['Value']
+        eur = data['Valute']['EUR']['Value']
+        fiat = f"🇺🇸 <b>USD:</b> {usd:.2f} ₽\n🇪🇺 <b>EUR:</b> {eur:.2f} ₽"
+    except:
+        fiat = "💱 Валюты: Нет данных"
+
+    # --- 2. Криптовалюта (Binance API) ---
+    try:
+        # Получаем цену Биткоина
+        btc_data = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT", timeout=5).json()
+        btc_price = float(btc_data['price'])
+        
+        # Получаем цену Эфира
+        eth_data = requests.get("https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT", timeout=5).json()
+        eth_price = float(eth_data['price'])
+
+        # Форматируем: {:,.0f} добавляет разделители тысяч (96,000)
+        crypto = f"🟠 <b>BTC:</b> {btc_price:,.0f} $\n💎 <b>ETH:</b> {eth_price:,.0f} $"
+    except:
+        crypto = "🪙 Крипта: Нет данных"
+
+    return f"💰 <b>Курсы:</b>\n{fiat}\n{crypto}"
 
 def get_full_horoscope():
     full_text = "🔮 <b>Гороскоп:</b>\n\n"
